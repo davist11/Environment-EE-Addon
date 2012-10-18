@@ -18,20 +18,20 @@
  * Environment Accessory
  *
  * @package		ExpressionEngine
- * @subpackage	Addons
- * @category	Accessory
+ * @subpackage		Addons
+ * @category		Accessory
  * @author		Trevor Davis
  * @link		http://trevordavis.net
  */
  
 class Environment_acc {
-	
+
 	public $name			= 'Environment';
-	public $id				= 'environment';
+	public $id			= 'environment';
 	public $version			= '1.0';
 	public $description		= 'Display which environment you are on at all times in the CP.';
 	public $sections		= array();
-	
+
 	/**
 	 * Set Sections
 	 */
@@ -39,15 +39,25 @@ class Environment_acc {
 	{
 		$EE =& get_instance();
 		$js = '';
-		
-		if ($EE->session->userdata('group_id') == 1 && defined('ENV')) {
+
+		if ($EE->session->userdata('group_id') == 1 && defined('ENV') OR defined('ENV_FULL')) {
+
+			if (defined('ENV_FULL'))
+			{
+				$env = ENV_FULL;
+			}
+			else
+			{
+				$env = ENV;
+			}
+
 			$js = 'var $body = $("body");
 				var $siteName = $("#navigationTabs").find(".msm_sites");
 				var siteNameOffset = $siteName.offset();
 				var rightPos = $body.width() - siteNameOffset.left + 20;
 				
-				$body.append("<div class=\"environment-label\" style=\"right: " + rightPos + "px;\">' . ENV . '</div>");';
-			
+				$body.append("<div class=\"environment-label\" style=\"right: " + rightPos + "px;\">' . $env . '</div>");';
+
 			$css = '<style type="text/css" media="screen">
 						.environment-label {
 							background: #1f2b33;
@@ -66,16 +76,16 @@ class Environment_acc {
 							z-index: 100;
 						}
 					</style>';
-			
+
 			$EE->cp->add_to_head($css);
 		}
-		
+
 		$this->sections[] = '<script type="text/javascript">$("#accessoryTabs a.' . $this->id . '").parent().remove();' . $js . '</script>';
-		
+
 	}
-	
+
 	// ----------------------------------------------------------------
-	
+
 }
  
 /* End of file acc.environment.php */
