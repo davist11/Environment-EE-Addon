@@ -41,12 +41,22 @@ class Environment_acc {
 		$js = '';
 		
 		if ($EE->session->userdata('group_id') == 1 && defined('ENV')) {
-			$js = 'var $body = $("body");
+			$js = '(function () {
+
+				var $body = $("body");
 				var $siteName = $("#navigationTabs").find(".msm_sites");
 				var siteNameOffset = $siteName.offset();
 				var rightPos = $body.width() - siteNameOffset.left + 20;
 				
-				$body.append("<div class=\"environment-label\" style=\"right: " + rightPos + "px;\">' . ENV . '</div>");';
+				var $div = $("<div />", {
+					class: "environment-label " + "'.ENV.'".toLowerCase(),
+					style: "right:" + rightPos + "px",
+					text: "'.ENV.'"
+				});
+
+				$body.append($div);
+
+			})();';
 			
 			$css = '<style type="text/css" media="screen">
 						.environment-label {
@@ -65,6 +75,21 @@ class Environment_acc {
 							top: 0;
 							z-index: 100;
 						}
+
+						.environment-label.local {
+							background: #3b8d04;
+						}
+
+						.environment-label.staging,
+						.environment-label.stage {
+							background: #ff8824;
+						}
+
+						.environment-label.production,
+						.environment-label.prod {
+							background: #ff1b35;
+						}
+
 					</style>';
 			
 			$EE->cp->add_to_head($css);
