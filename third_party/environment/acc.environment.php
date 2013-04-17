@@ -28,7 +28,7 @@ class Environment_acc {
 	
 	public $name			= 'Environment';
 	public $id				= 'environment';
-	public $version			= '1.0';
+	public $version			= '1.1';
 	public $description		= 'Display which environment you are on at all times in the CP.';
 	public $sections		= array();
 	
@@ -39,6 +39,7 @@ class Environment_acc {
 	{
 		$EE =& get_instance();
 		$js = '';
+		$bg = $EE->config->item('environment_color') ? $EE->config->item('environment_color') : '#1f2b33';
 		
 		if ($EE->session->userdata('group_id') == 1 && defined('ENV')) {
 			$js = '(function () {
@@ -49,9 +50,9 @@ class Environment_acc {
 				var rightPos = $body.width() - siteNameOffset.left + 20;
 				
 				var $div = $("<div />", {
-					class: "environment-label " + "'.ENV.'".toLowerCase(),
+					"class": "environment-label " + "' . ENV . '".toLowerCase(),
 					style: "right:" + rightPos + "px",
-					text: "'.ENV.'"
+					text: "' . ENV . '"
 				});
 
 				$body.append($div);
@@ -60,7 +61,7 @@ class Environment_acc {
 			
 			$css = '<style type="text/css" media="screen">
 						.environment-label {
-							background: #1f2b33;
+							background: ' . $bg . ';
 							-moz-border-radius-bottomleft: 3px;
 							-webkit-border-bottom-left-radius: 3px;
 							border-bottom-left-radius: 3px;
@@ -75,21 +76,6 @@ class Environment_acc {
 							top: 0;
 							z-index: 100;
 						}
-
-						.environment-label.local {
-							background: #3b8d04;
-						}
-
-						.environment-label.staging,
-						.environment-label.stage {
-							background: #ff8824;
-						}
-
-						.environment-label.production,
-						.environment-label.prod {
-							background: #ff1b35;
-						}
-
 					</style>';
 			
 			$EE->cp->add_to_head($css);
