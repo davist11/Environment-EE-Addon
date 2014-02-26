@@ -5,11 +5,11 @@ Display which environment you are on **at all times** in the CP so you don't acc
 		case 'site.com':
 			define('ENV', 'prod');
 		break;
-		
+
 		case 'stage.site.com':
 			define('ENV', 'staging');
 		break;
-	
+
 		default:
 			define('ENV', 'local');
 		break;
@@ -26,7 +26,7 @@ You can also change the color of the environment label using a config variable n
 			define('ENV', 'prod');
 			$config['environment_color'] = 'green';
 		break;
-	
+
 		default:
 			define('ENV', 'local');
 			$config['environment_color'] = '#f00';
@@ -34,4 +34,8 @@ You can also change the color of the environment label using a config variable n
 	}
 }</pre>
 
-*Note: only shown to Super Admins.*
+You can customize which member groups see the label by using a config variable named **environment_member_groups** and assigning it to an array of member group IDs.
+
+<pre>$config['environment_member_groups'] = array(1, 6);</pre>
+
+By default, it is visible to the Super Admin member group.

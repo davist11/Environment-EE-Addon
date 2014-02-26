@@ -1,5 +1,5 @@
 <?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
- 
+
 /**
  * ExpressionEngine - by EllisLab
  *
@@ -11,9 +11,9 @@
  * @since		Version 2.0
  * @filesource
  */
- 
+
 // ------------------------------------------------------------------------
- 
+
 /**
  * Environment Accessory
  *
@@ -23,15 +23,15 @@
  * @author		Trevor Davis
  * @link		http://trevordavis.net
  */
- 
+
 class Environment_acc {
-	
+
 	public $name			= 'Environment';
 	public $id				= 'environment';
-	public $version			= '1.1';
+	public $version			= '1.2';
 	public $description		= 'Display which environment you are on at all times in the CP.';
 	public $sections		= array();
-	
+
 	/**
 	 * Set Sections
 	 */
@@ -40,15 +40,16 @@ class Environment_acc {
 		$EE =& get_instance();
 		$js = '';
 		$bg = $EE->config->item('environment_color') ? $EE->config->item('environment_color') : '#1f2b33';
-		
-		if ($EE->session->userdata('group_id') == 1 && defined('ENV')) {
+		$member_groups = $EE->config->item('environment_member_groups') ? $EE->config->item('environment_member_groups') : array(1);
+
+		if (in_array($EE->session->userdata('group_id'), $member_groups) && defined('ENV')) {
 			$js = '(function () {
 
 				var $body = $("body");
 				var $siteName = $("#navigationTabs").find(".msm_sites");
 				var siteNameOffset = $siteName.offset();
 				var rightPos = $body.width() - siteNameOffset.left + 20;
-				
+
 				var $div = $("<div />", {
 					"class": "environment-label " + "' . ENV . '".toLowerCase(),
 					style: "right:" + rightPos + "px",
@@ -58,7 +59,7 @@ class Environment_acc {
 				$body.append($div);
 
 			})();';
-			
+
 			$css = '<style type="text/css" media="screen">
 						.environment-label {
 							background: ' . $bg . ';
@@ -77,17 +78,17 @@ class Environment_acc {
 							z-index: 100;
 						}
 					</style>';
-			
+
 			$EE->cp->add_to_head($css);
 		}
-		
+
 		$this->sections[] = '<script type="text/javascript">$("#accessoryTabs a.' . $this->id . '").parent().remove();' . $js . '</script>';
-		
+
 	}
-	
+
 	// ----------------------------------------------------------------
-	
+
 }
- 
+
 /* End of file acc.environment.php */
 /* Location: /system/expressionengine/third_party/environment/acc.environment.php */
